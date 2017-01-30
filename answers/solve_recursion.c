@@ -18,51 +18,55 @@
 
 static _Bool	does_fit(char **map, int piece, int x, int y)
 {
-	int		i;
-
-	i = 0;
-	while (i < 4)
-	{
-		if (map_mask(map, g_mp, x + g_p_crds_y[piece][i],\
-				y + g_p_crds_x[piece][i]) != '.')
-			return (0);
-		i++;
-	}
+	if (map_mask(map, g_mp, x + g_p_crds_y[piece][0],\
+			y + g_p_crds_x[piece][0]) != '.')
+		return (0);
+	else if (map_mask(map, g_mp, x + g_p_crds_y[piece][1],\
+			y + g_p_crds_x[piece][1]) != '.')
+		return (0);
+	else if (map_mask(map, g_mp, x + g_p_crds_y[piece][2],\
+			y + g_p_crds_x[piece][2]) != '.')
+		return (0);
+	else if (map_mask(map, g_mp, x + g_p_crds_y[piece][3],\
+			y + g_p_crds_x[piece][3]) != '.')
+		return (0);
 	return (1);
 }
 
-static void		remove_piece(char **solution, int step, int x, int y)
+static void		remove_piece(char **solution, int piece, int x, int y)
 {
-	int		i;
-
-	i = 0;
-	while (i < 4)
-	{
-		solution[y + g_p_crds_x[g_input[step]][i]][x\
-			+ g_p_crds_y[g_input[step]][i]] = '.';
-		i++;
-	}
+	solution[y + g_p_crds_x[piece][0]][x\
+			+ g_p_crds_y[piece][0]] = '.';
+	solution[y + g_p_crds_x[piece][1]][x\
+			+ g_p_crds_y[piece][1]] = '.';
+	solution[y + g_p_crds_x[piece][2]][x\
+			+ g_p_crds_y[piece][2]] = '.';
+	solution[y + g_p_crds_x[piece][3]][x\
+			+ g_p_crds_y[piece][3]] = '.';
 }
 
 static void		add_piece(char **solution, int step, int x, int y)
 {
-	int		i;
 	char	c;
+	int		piece;
 
 	c = 'A' + step;
-	i = 0;
-	while (i < 4)
-	{
-		solution[y + g_p_crds_x[g_input[step]][i]][x\
-			+ g_p_crds_y[g_input[step]][i]] = c;
-		i++;
-	}
+	piece = g_input[step];
+	solution[y + g_p_crds_x[piece][0]][x\
+		+ g_p_crds_y[piece][0]] = c;
+	solution[y + g_p_crds_x[piece][1]][x\
+		+ g_p_crds_y[piece][1]] = c;
+	solution[y + g_p_crds_x[piece][2]][x\
+		+ g_p_crds_y[piece][2]] = c;
+	solution[y + g_p_crds_x[piece][3]][x\
+		+ g_p_crds_y[piece][3]] = c;
 }
 
 int				recursion_head(char **solution, int step)
 {
 	int		x;
 	int		y;
+	int		piece;
 
 	//print_map(solution);
 	//printf("piece: %d\n", g_input[step]);
@@ -70,7 +74,8 @@ int				recursion_head(char **solution, int step)
 	//write(1, "\n", 1);
 	if (g_input[step] == -1)
 		return (1);
-	y = g_farthest_y[g_input[step]];
+	piece = g_input[step];
+	y = g_farthest_y[piece];
 	//int i;
 	//i = 0;
 	//while (i < P_TYPE_CNT)
@@ -83,19 +88,19 @@ int				recursion_head(char **solution, int step)
 		x = 0;
 		while (x < g_mp)
 		{
-			if (does_fit(solution, g_input[step], x, y))
+			if (does_fit(solution, piece, x, y))
 			{
 				//printf("piece %d fits\n", step);
-				g_farthest_y[g_input[step]] = y;
+				g_farthest_y[piece] = y;
 				add_piece(solution, step, x, y);
 				if (recursion_head(solution, step + 1))
 					return (1);
-				remove_piece(solution, step, x, y);
+				remove_piece(solution, piece, x, y);
 			}
 			x++;
 		}
 		y++;
 	}
-	g_farthest_y[g_input[step]] = 0;
+	g_farthest_y[piece] = 0;
 	return (0);
 }
