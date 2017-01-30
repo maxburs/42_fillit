@@ -15,6 +15,30 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static char		**solution_dup(char **solution)
+{
+	char	**new;
+	int		x;
+	int		y;
+
+	if (!(new = malloc_solution_map(g_mp)))
+	{
+		return (NULL);
+	}
+	y = 0;
+	while (y < g_mp)
+	{
+		x = 0;
+		while (x < g_mp)
+		{
+			new[y][x] = solution[y][x];
+			x++;
+		}
+		y++;
+	}
+	return (new);
+}
+
 char			**malloc_solution_map(int size)
 {
 	char	**solution;
@@ -57,15 +81,17 @@ static char		**init_solution(char **solution, int size)
 
 static char		**solve_size(void)
 {
-	char	**solution;
+	char	**solution/*[g_mp][g_mp]*/;
 
-	if (!(solution = malloc_solution_map(g_map_size)))
+	if (!(solution = malloc_solution_map(g_mp)))
 	{
 		return (NULL);
 	}
-	init_solution(solution, g_map_size);
-	solution = recursion_head(solution, 0);
-	return (solution);
+	init_solution(solution, g_mp);
+	if (recursion_head(solution, 0))
+		return (solution_dup(solution));
+	free (solution);
+	return (NULL);
 }
 
 static	int		min_solution_size(int len)
@@ -86,8 +112,8 @@ char			**solve(void)
 	input_len = 0;
 	while (g_input[input_len] != -1)
 		input_len++;
-	g_map_size = min_solution_size(input_len);
+	g_mp = min_solution_size(input_len);
 	while (!(solution = solve_size()))
-		g_map_size++;
+		g_mp++;
 	return (solution);
 }

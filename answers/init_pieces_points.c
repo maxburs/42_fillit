@@ -37,6 +37,18 @@ static void		init_piece(int piece)
 	}
 }
 
+void			init_no_placed(void)
+{
+	int		i;
+
+	i = 0;
+	while (i < P_TYPE_CNT)
+	{
+		g_no_placed[i] = 0;
+		i++;
+	}
+}
+
 void			init_pieces_points(void)
 {
 	int		i;
@@ -47,4 +59,5 @@ void			init_pieces_points(void)
 		init_piece(i);
 		i++;
 	}
+	init_no_placed();
 }

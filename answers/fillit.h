@@ -18,6 +18,11 @@
 # define MAX_INPUT_SIZE 26
 
 /*
+** fillit.c
+*/
+void					print_map(char **solution);
+
+/*
 ** matts stuff
 */
 extern const char		*g_minos[];
@@ -46,7 +51,8 @@ extern int				g_p_crds_x[P_TYPE_CNT][4];
 extern int				g_p_crds_y[P_TYPE_CNT][4];
 extern const _Bool		g_piece_types[P_TYPE_CNT][4][4];
 extern int				*g_input;
-extern int				g_map_size;
+extern int				g_mp;
+extern int				g_no_placed[P_TYPE_CNT];
 
 /*
 ** solve.c
@@ -57,7 +63,7 @@ char					**malloc_solution_map(int size);
 /*
 ** solve_recursion.c
 */
-char					**recursion_head(char **solution, int step);
+int						recursion_head(char **solution, int step);
 
 /*
 ** helper.c

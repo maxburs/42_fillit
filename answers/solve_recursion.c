@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <fillit.h>
 
+#include <stdio.h>
+
 static _Bool	does_fit(char **map, int piece, int x, int y)
 {
 	int		i;
@@ -20,7 +22,7 @@ static _Bool	does_fit(char **map, int piece, int x, int y)
 	i = 0;
 	while (i < 4)
 	{
-		if (map_mask(map, g_map_size, x + g_p_crds_y[piece][i],\
+		if (map_mask(map, g_mp, x + g_p_crds_y[piece][i],\
 				y + g_p_crds_x[piece][i]) != '.')
 			return (0);
 		i++;
@@ -28,28 +30,17 @@ static _Bool	does_fit(char **map, int piece, int x, int y)
 	return (1);
 }
 
-static char		**solution_dup(char **solution)
+static void		remove_piece(char **solution, int step, int x, int y)
 {
-	char	**new;
-	int		x;
-	int		y;
+	int		i;
 
-	if (!(new = malloc_solution_map(g_map_size)))
+	i = 0;
+	while (i < 4)
 	{
-		return (NULL);
+		solution[y + g_p_crds_x[g_input[step]][i]][x\
+			+ g_p_crds_y[g_input[step]][i]] = '.';
+		i++;
 	}
-	y = 0;
-	while (y < g_map_size)
-	{
-		x = 0;
-		while (x < g_map_size)
-		{
-			new[y][x] = solution[y][x];
-			x++;
-		}
-		y++;
-	}
-	return (new);
 }
 
 static void		add_piece(char **solution, int step, int x, int y)
@@ -67,30 +58,31 @@ static void		add_piece(char **solution, int step, int x, int y)
 	}
 }
 
-char			**recursion_head(char **solution, int step)
+int				recursion_head(char **solution, int step)
 {
 	int		x;
 	int		y;
-	char	**new;
 
+	//print_map(solution);
 	if (g_input[step] == -1)
-		return (solution);
+		return (1);
 	y = 0;
-	while (y < g_map_size)
+	while (y < g_mp)
 	{
 		x = 0;
-		while (x < g_map_size)
+		while (x < g_mp)
 		{
 			if (does_fit(solution, g_input[step], x, y))
 			{
-				add_piece((new = solution_dup(solution)), step, x, y);
-				if ((new = recursion_head(new, step + 1)))
-					return (new);
+				//printf("piece %d fits\n", step);
+				add_piece(solution, step, x, y);
+				if (recursion_head(solution, step + 1))
+					return (1);
+				remove_piece(solution, step, x, y);
 			}
 			x++;
 		}
 		y++;
 	}
-	free_map(solution);
-	return (NULL);
+	return (0);
 }

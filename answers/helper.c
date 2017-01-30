@@ -29,7 +29,7 @@ void	free_map(char	**map)
 	int	i;
 
 	i = 0;
-	while (i < g_map_size)
+	while (i < g_mp)
 	{
 		free(map[i]);
 		i++;

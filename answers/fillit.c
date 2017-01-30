@@ -18,7 +18,7 @@ static void		print_error(void)
 	write(1, "error\n", 6);
 }
 
-static void		print_map(char **solution)
+void			print_map(char **solution)
 {
 	int		x;
 	int		y;
@@ -29,10 +29,10 @@ static void		print_map(char **solution)
 		return ;
 	}
 	y = 0;
-	while (y < g_map_size)
+	while (y < g_mp)
 	{
 		x = 0;
-		while (x < g_map_size)
+		while (x < g_mp)
 		{
 			write(1, &(solution[y][x]), 1);
 			x++;
