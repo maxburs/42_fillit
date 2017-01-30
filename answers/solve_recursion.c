@@ -14,6 +14,7 @@
 #include <fillit.h>
 
 #include <stdio.h>
+#include <unistd.h>
 
 static _Bool	does_fit(char **map, int piece, int x, int y)
 {
@@ -64,9 +65,19 @@ int				recursion_head(char **solution, int step)
 	int		y;
 
 	//print_map(solution);
+	//printf("piece: %d\n", g_input[step]);
+	//printf("staring row: %d\n", g_farthest_y[g_input[step]]);
+	//write(1, "\n", 1);
 	if (g_input[step] == -1)
 		return (1);
-	y = 0;
+	y = g_farthest_y[g_input[step]];
+	//int i;
+	//i = 0;
+	//while (i < P_TYPE_CNT)
+	//{
+	//	printf("%d s=: %d, ", i,g_farthest_y[i]);
+	//	i++;
+	//}
 	while (y < g_mp)
 	{
 		x = 0;
@@ -75,6 +86,7 @@ int				recursion_head(char **solution, int step)
 			if (does_fit(solution, g_input[step], x, y))
 			{
 				//printf("piece %d fits\n", step);
+				g_farthest_y[g_input[step]] = y;
 				add_piece(solution, step, x, y);
 				if (recursion_head(solution, step + 1))
 					return (1);
@@ -84,5 +96,6 @@ int				recursion_head(char **solution, int step)
 		}
 		y++;
 	}
+	g_farthest_y[g_input[step]] = 0;
 	return (0);
 }

@@ -37,14 +37,15 @@ static void		init_piece(int piece)
 	}
 }
 
-void			init_no_placed(void)
+void			zero_farthest(void)
 {
 	int		i;
 
 	i = 0;
 	while (i < P_TYPE_CNT)
 	{
-		g_no_placed[i] = 0;
+		g_farthest_x[i] = 0;
+		g_farthest_y[i] = 0;
 		i++;
 	}
 }
@@ -59,5 +60,5 @@ void			init_pieces_points(void)
 		init_piece(i);
 		i++;
 	}
-	init_no_placed();
+	zero_farthest();
 }

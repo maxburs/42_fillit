@@ -33,6 +33,7 @@ int						string_not_val(char *string, int *input);
 ** init_pieces_points.c
 */
 void					init_pieces_points(void);
+void					zero_farthest(void);
 
 /*
 ** piece_mask.c
@@ -52,7 +53,8 @@ extern int				g_p_crds_y[P_TYPE_CNT][4];
 extern const _Bool		g_piece_types[P_TYPE_CNT][4][4];
 extern int				*g_input;
 extern int				g_mp;
-extern int				g_no_placed[P_TYPE_CNT];
+extern int				g_farthest_x[P_TYPE_CNT];
+extern int				g_farthest_y[P_TYPE_CNT];
 
 /*
 ** solve.c
